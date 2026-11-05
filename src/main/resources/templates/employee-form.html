@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <title>Employee Form</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Employee Details</h1>
+
+    <form th:action="@{/employees/save}"
+          th:object="${employee}"
+          method="post">
+
+        <input type="hidden" th:field="*{id}">
+
+        <label>First Name</label>
+
+        <input type="text"
+               th:field="*{firstName}"
+               required>
+
+        <label>Last Name</label>
+
+        <input type="text"
+               th:field="*{lastName}"
+               required>
+
+        <label>Email</label>
+
+        <input type="email"
+               th:field="*{email}"
+               required>
+
+        <label>Department</label>
+
+        <input type="text"
+               th:field="*{department}"
+               required>
+
+        <label>Salary</label>
+
+        <input type="number"
+               step="0.01"
+               min="0"
+               th:field="*{salary}"
+               required>
+
+        <button type="submit">
+            Save Employee
+        </button>
+
+    </form>
+
+    <br>
+
+    <a th:href="@{/employees}">
+        Back to Employee List
+    </a>
+
+</div>
+
+</body>
+</html>

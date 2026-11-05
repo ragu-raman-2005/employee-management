@@ -1,12 +1,11 @@
-
 package com.employee.service;
 
 import com.employee.entity.Employee;
 import com.employee.repository.EmployeeRepository;
 
 import org.springframework.stereotype.Service;
+
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class EmployeeService {
@@ -17,29 +16,33 @@ public class EmployeeService {
         this.repository = repository;
     }
 
-    // Add Employee
-    public Employee addEmployee(Employee employee) {
-        return repository.save(employee);
-    }
-
-    // Get All Employees
+    // Get all employees
     public List<Employee> getAllEmployees() {
         return repository.findAll();
     }
 
-    // Get Employee By ID
-    public Optional<Employee> getEmployeeById(Long id) {
-        return repository.findById(id);
+    // Get employee by ID
+    public Employee getEmployeeById(Long id) {
+
+        return repository.findById(id)
+                .orElseThrow(() ->
+                    new RuntimeException(
+                        "Employee not found with ID: " + id
+                    ));
     }
 
-    // Update Employee
+    // Save employee
+    public Employee saveEmployee(Employee employee) {
+        return repository.save(employee);
+    }
+
+    // Update employee
     public Employee updateEmployee(Long id, Employee employee) {
 
-        Employee existing = repository.findById(id)
-                .orElseThrow(() ->
-                    new RuntimeException("Employee not found"));
+        Employee existing = getEmployeeById(id);
 
-        existing.setName(employee.getName());
+        existing.setFirstName(employee.getFirstName());
+        existing.setLastName(employee.getLastName());
         existing.setEmail(employee.getEmail());
         existing.setDepartment(employee.getDepartment());
         existing.setSalary(employee.getSalary());
@@ -47,8 +50,9 @@ public class EmployeeService {
         return repository.save(existing);
     }
 
-    // Delete Employee
+    // Delete employee
     public void deleteEmployee(Long id) {
+
         repository.deleteById(id);
     }
 }

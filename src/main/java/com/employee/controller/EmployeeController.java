@@ -1,15 +1,15 @@
-
 package com.employee.controller;
 
 import com.employee.entity.Employee;
 import com.employee.service.EmployeeService;
 
-import org.springframework.web.bind.annotation.*;
-import java.util.List;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 
-@RestController
-@RequestMapping("/api/employees")
-@CrossOrigin(origins = "*")
+import org.springframework.web.bind.annotation.*;
+
+@Controller
+@RequestMapping("/employees")
 public class EmployeeController {
 
     private final EmployeeService service;
@@ -18,38 +18,58 @@ public class EmployeeController {
         this.service = service;
     }
 
-    // Add Employee
-    @PostMapping
-    public Employee addEmployee(@RequestBody Employee employee) {
-        return service.addEmployee(employee);
-    }
-
-    // Get All Employees
+    // Display all employees
     @GetMapping
-    public List<Employee> getAllEmployees() {
-        return service.getAllEmployees();
+    public String listEmployees(Model model) {
+
+        model.addAttribute(
+            "employees",
+            service.getAllEmployees()
+        );
+
+        return "employees";
     }
 
-    // Get Employee By ID
-    @GetMapping("/{id}")
-    public Employee getEmployeeById(@PathVariable Long id) {
-        return service.getEmployeeById(id)
-                .orElseThrow(() ->
-                    new RuntimeException("Employee not found"));
+    // Show add employee form
+    @GetMapping("/new")
+    public String createEmployeeForm(Model model) {
+
+        model.addAttribute("employee", new Employee());
+
+        return "employee-form";
     }
 
-    // Update Employee
-    @PutMapping("/{id}")
-    public Employee updateEmployee(
+    // Save employee
+    @PostMapping("/save")
+    public String saveEmployee(
+            @ModelAttribute Employee employee) {
+
+        service.saveEmployee(employee);
+
+        return "redirect:/employees";
+    }
+
+    // Edit employee
+    @GetMapping("/edit/{id}")
+    public String editEmployee(
             @PathVariable Long id,
-            @RequestBody Employee employee) {
-        return service.updateEmployee(id, employee);
+            Model model) {
+
+        model.addAttribute(
+            "employee",
+            service.getEmployeeById(id)
+        );
+
+        return "employee-form";
     }
 
-    // Delete Employee
-    @DeleteMapping("/{id}")
-    public String deleteEmployee(@PathVariable Long id) {
+    // Delete employee
+    @GetMapping("/delete/{id}")
+    public String deleteEmployee(
+            @PathVariable Long id) {
+
         service.deleteEmployee(id);
-        return "Employee deleted successfully";
+
+        return "redirect:/employees";
     }
 }

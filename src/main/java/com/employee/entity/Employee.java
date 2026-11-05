@@ -1,7 +1,4 @@
-
-
 package com.employee.entity;
-
 
 import jakarta.persistence.*;
 
@@ -13,21 +10,33 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String firstName;
+
+    private String lastName;
+
     private String email;
+
     private String department;
+
     private double salary;
 
+    // Default Constructor
     public Employee() {
     }
 
-    public Employee(String name, String email,
-                    String department, double salary) {
-        this.name = name;
+    // Parameterized Constructor
+    public Employee(String firstName, String lastName,
+                    String email, String department,
+                    double salary) {
+
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.department = department;
         this.salary = salary;
     }
+
+    // Getters and Setters
 
     public Long getId() {
         return id;
@@ -37,12 +46,20 @@ public class Employee {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getEmail() {
